@@ -1,0 +1,15 @@
+version: 22
+jobs:
+- name: Upload to git's
+  steps:
+  - !PushRepository
+    name: Sync Main (GitHub)
+    remoteUrl: https://github.com/MushroomSquad/Nick
+    userName: DonSudak
+    passwordSecret: github
+    force: false
+    condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
+  retryCondition: never
+  maxRetries: 3
+  retryDelay: 30
+  timeout: 3600
