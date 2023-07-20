@@ -10,14 +10,16 @@ class Server:
     ) -> None:
         self.__app = app
 
-    def load_config(
+    async def load_config(
         self,
         path: str,
     ) -> Config:
-        env = Env()
+        env: Env = Env()
         env.read_env(path)
         return Config(
             db=DB_Config(
+                dialect=env.str("DIALECT"),
+                driver=env.str("DB_DRIVER"),
                 host=env.str("DB_HOST"),
                 password=env.str("DB_PASS"),
                 user=env.str("DB_USER"),
@@ -35,17 +37,21 @@ class Server:
             ),
         )
 
-    def on_startup(
+    async def on_startup(
         self,
         path: str,
-    ) -> FastAPI:
-        conf = self.load_config(path)
+    ) -> None:
+        conf = await self.load_config(path)
         register_routes(
             self.__app,
             conf,
-            Data_Base(conf.db.host),
+            Data_Base(conf.db),
         )
-        return self.__app
+
+    async def on_shutdown(
+        self,
+    ) -> None:
+        ...
 
 
 __all__: list[str] = [

@@ -9,6 +9,8 @@ from .database import Data_Base
 
 @dataclass
 class DB_Config:
+    dialect: str
+    driver: str
     host: str
     password: str
     user: str
@@ -28,3 +30,16 @@ class Crypt_Config:
 class Config:
     db: DB_Config
     crypt: Crypt_Config
+
+
+__all__: list[str] = [
+    "FastAPI",
+    "register_routes",
+    "Env",
+    "OAuth2PasswordBearer",
+    "CryptContext",
+    "Data_Base",
+    "DB_Config",
+    "Crypt_Config",
+    "Config",
+]

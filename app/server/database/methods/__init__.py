@@ -1,1 +1,1 @@
-from .sql_methods import *
+from .sql_queries import *

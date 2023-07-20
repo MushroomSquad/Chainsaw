@@ -1,31 +1,29 @@
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from .methods import *
-import inspect
 
 
 class Data_Base:
     def __init__(
         self,
-        host: str | None = None,
-        password: str | None = None,
-        user: str | None = None,
-        database: str | None = None,
+        conf,
     ) -> None:
         self.queries = sql_queries
-        _args, _local = inspect.signature(self.__init__), locals()
-        self.connect_args: list[str] = [
-            _local[param.name]
-            for param in _args.parameters.values()
-            if _local[param.name]
-        ]
+        if conf.user and conf.password:
+            self.url: str = f"{conf.dialect}+{conf.driver}://{conf.user}:{conf.password}@{conf.host}/{conf.database}"
+        else:
+            self.url: str = f"{conf.dialect}+{conf.driver}:///{conf.host}"
+        self.init_session()
 
-    async def create_connect(
+    def init_session(
         self,
-        host: str | None = None,
-        password: str | None = None,
-        user: str | None = None,
-        database: str | None = None,
     ):
-        ...
+        self.session = async_sessionmaker(
+            create_async_engine(
+                self.url,
+                echo=True,
+            ),
+            expire_on_commit=False,
+        )
 
 
 __all__: list[str] = [
