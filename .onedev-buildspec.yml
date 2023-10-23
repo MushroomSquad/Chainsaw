@@ -4,8 +4,8 @@ jobs:
   steps:
   - !PushRepository
     name: Sync Main (GitHub)
-    remoteUrl: https://github.com/MushroomSquad/Nick
-    userName: DonSudak
+    remoteUrl: https://github.com/MushroomSquad/Chainsaw
+    userName: J@ne_Ark
     passwordSecret: github
     force: false
     condition: ALL_PREVIOUS_STEPS_WERE_SUCCESSFUL
