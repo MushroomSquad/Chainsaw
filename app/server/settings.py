@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from .routers import register_routes
 from dataclasses import dataclass
-from environs import Env
+from dotenv import dotenv_values
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
 from .database import Data_Base
@@ -35,7 +35,7 @@ class Config:
 __all__: list[str] = [
     "FastAPI",
     "register_routes",
-    "Env",
+    "dotenv_values",
     "OAuth2PasswordBearer",
     "CryptContext",
     "Data_Base",

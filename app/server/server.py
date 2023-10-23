@@ -14,25 +14,24 @@ class Server:
         self,
         path: str,
     ) -> Config:
-        env: Env = Env()
-        env.read_env(path)
+        env: dict = dotenv_values(path)
         return Config(
             db=DB_Config(
-                dialect=env.str("DIALECT"),
-                driver=env.str("DB_DRIVER"),
-                host=env.str("DB_HOST"),
-                password=env.str("DB_PASS"),
-                user=env.str("DB_USER"),
-                database=env.str("DB_NAME"),
+                dialect=env["DIALECT"],
+                driver=env["DB_DRIVER"],
+                host=env["DB_HOST"],
+                password=env["DB_PASS"],
+                user=env["DB_USER"],
+                database=env["DB_NAME"],
             ),
             crypt=Crypt_Config(
-                SECRET_KEY=env.str("SECRET_KEY"),
-                ALGORITHM=env.str("ALGORITHM"),
-                ACCESS_TOKEN_EXPIRE_MINUTS=env.int("ACCESS_TOKEN_EXPIRE_MINUTS"),
-                oauth2_scheme=OAuth2PasswordBearer(tokenUrl=env.str("tokenUrl")),
+                SECRET_KEY=env["SECRET_KEY"],
+                ALGORITHM=env["ALGORITHM"],
+                ACCESS_TOKEN_EXPIRE_MINUTS=env["ACCESS_TOKEN_EXPIRE_MINUTS"],
+                oauth2_scheme=OAuth2PasswordBearer(tokenUrl=env["tokenUrl"]),
                 pwd_context=CryptContext(
-                    schemes=env.list("schemes"),
-                    deprecated=env.str("deprecated"),
+                    schemes=env["schemes"],
+                    deprecated=env["deprecated"],
                 ),
             ),
         )
