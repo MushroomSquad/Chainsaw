@@ -1,10 +1,6 @@
-from fastapi import FastAPI
-from .routers import register_routes
 from dataclasses import dataclass
-from dotenv import dotenv_values
 from fastapi.security import OAuth2PasswordBearer
 from passlib.context import CryptContext
-from .database import Data_Base
 
 
 @dataclass
@@ -22,8 +18,8 @@ class Crypt_Config:
     SECRET_KEY: str
     ALGORITHM: str
     ACCESS_TOKEN_EXPIRE_MINUTS: str
-    oauth2_scheme: object
-    pwd_context: object
+    oauth2_scheme: OAuth2PasswordBearer
+    pwd_context: CryptContext
 
 
 @dataclass
@@ -33,12 +29,6 @@ class Config:
 
 
 __all__: list[str] = [
-    "FastAPI",
-    "register_routes",
-    "dotenv_values",
-    "OAuth2PasswordBearer",
-    "CryptContext",
-    "Data_Base",
     "DB_Config",
     "Crypt_Config",
     "Config",

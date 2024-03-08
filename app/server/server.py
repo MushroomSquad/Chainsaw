@@ -1,14 +1,25 @@
-from .settings import *
+from fastapi import FastAPI
+from fastapi.security import OAuth2PasswordBearer
+from dotenv import dotenv_values
+from passlib.context import CryptContext
+from fastapi.middleware.cors import CORSMiddleware
+
+
+from .database import Data_Base
+from .routers import register_routes
+from .models import DB_Config, Crypt_Config, Config
+
+origins = [
+    "*",
+]
 
 
 class Server:
-    __app: FastAPI
-
     def __init__(
         self,
         app: FastAPI,
     ) -> None:
-        self.__app = app
+        self._app: FastAPI = app
 
     async def load_config(
         self,
@@ -36,21 +47,31 @@ class Server:
             ),
         )
 
+    async def register_cors(
+        self,
+    ):
+        self._app.add_middleware(
+            CORSMiddleware,
+            allow_origins=origins,
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
+
     async def on_startup(
         self,
         path: str,
     ) -> None:
-        conf = await self.load_config(path)
+        conf: Config = await self.load_config(path)
         register_routes(
-            self.__app,
+            self._app,
             conf,
             Data_Base(conf.db),
         )
 
     async def on_shutdown(
         self,
-    ) -> None:
-        ...
+    ) -> None: ...
 
 
 __all__: list[str] = [

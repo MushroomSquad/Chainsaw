@@ -1,11 +1,17 @@
 from fastapi import FastAPI
-from .server import Server
+
 from contextlib import asynccontextmanager
+
+from collections.abc import AsyncIterator
+
+from .server import Server
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
-    server = Server(app)
+async def lifespan(
+    app: FastAPI,
+) -> AsyncIterator:
+    server: Server = Server(app)
     await server.on_startup("./app/.env")
     yield
     await server.on_shutdown()
@@ -14,6 +20,5 @@ async def lifespan(app: FastAPI):
 def main(
     _=None,
 ) -> FastAPI:
-    app = FastAPI(lifespan=lifespan)
-
+    app: FastAPI = FastAPI(lifespan=lifespan)
     return app
